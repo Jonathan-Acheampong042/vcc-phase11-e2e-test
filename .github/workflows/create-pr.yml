@@ -1,0 +1,23 @@
+name: Create PR
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        required: true
+      title:
+        required: true
+jobs:
+  create:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.branch }}
+      - env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create --title "${{ github.event.inputs.title }}" --body "test" --head "${{ github.event.inputs.branch }}" --base main
+
